@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import MyPortfolio from './components/MyPortfolio';
 import { NativeBaseProvider } from 'native-base';
+import Evidence from './components/Evidence';
 
 function Notifications() {
   return (
@@ -32,9 +33,9 @@ function MyDrawer() {
         options={{ drawerLabel: 'My portfolio' }}
       />
       <Drawer.Screen
-        name="Notifications"
-        component={Notifications}
-        options={{ drawerLabel: 'Updates' }}
+        name="Evidence"
+        component={Evidence}
+        options={{ drawerLabel: 'Evidence' }}
       />
       <Drawer.Screen
         name="Profile"
