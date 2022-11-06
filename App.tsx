@@ -1,40 +1,56 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, View } from 'react-native';
-import { NativeBaseProvider, Box, Text } from "native-base";
+import * as React from 'react';
+import { View, Text } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { navigationRef } from './helpers'
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import MyPortfolio from './components/MyPortfolio';
+import { NativeBaseProvider } from 'native-base';
 
-const Stack = createNativeStackNavigator()
-
-function ExampleComponent() {
+function Notifications() {
   return (
-    <Box flex={1} alignItems="center" justifyContent="center">
-      <Text>
-        Mobile portfolio bootstrapped
-      </Text>
-    </Box>
-  )
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Notifications Screen</Text>
+    </View>
+  );
+}
+
+function Profile() {
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <Text>Profile Screen</Text>
+    </View>
+  );
+}
+
+const Drawer = createDrawerNavigator();
+
+function MyDrawer() {
+  return (
+    <Drawer.Navigator useLegacyImplementation initialRouteName="MyPortfolio">
+      <Drawer.Screen
+        name="My Portfolio"
+        component={MyPortfolio}
+        options={{ drawerLabel: 'My portfolio' }}
+      />
+      <Drawer.Screen
+        name="Notifications"
+        component={Notifications}
+        options={{ drawerLabel: 'Updates' }}
+      />
+      <Drawer.Screen
+        name="Profile"
+        component={Profile}
+        options={{ drawerLabel: 'Profile' }}
+      />
+    </Drawer.Navigator>
+  );
 }
 
 export default function App() {
   return (
     <NativeBaseProvider>
-      <NavigationContainer ref={navigationRef}>
-        <Stack.Navigator >
-          <Stack.Screen name="GameLobby" options={{ headerShown: false }} component={ExampleComponent} />
-        </Stack.Navigator>
+      <NavigationContainer>
+        <MyDrawer />
       </NavigationContainer>
     </NativeBaseProvider>
   )
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
