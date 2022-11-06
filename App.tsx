@@ -7,6 +7,7 @@ import { NativeBaseProvider } from 'native-base';
 import Evidence from './components/Evidence';
 import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack'
 import AddEvidence from './components/AddEvidence';
+import FileUploadEvidence from './components/FileUploadEvidence';
 
 function Profile() {
   return (
@@ -68,6 +69,7 @@ export default function App() {
             component={MyDrawer}
           />
           <Stack.Screen name="AddEvidence" options={{ headerShown: false }} component={AddEvidence} />
+          <Stack.Screen name="FileUploadEvidence" options={{ headerShown: false }} component={FileUploadEvidence} />
         </Stack.Navigator>
 
       </NavigationContainer>

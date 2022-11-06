@@ -7,19 +7,17 @@ import { useNavigation } from '@react-navigation/native';
 import { NavigationProp, ParamListBase } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Entypo } from '@expo/vector-icons';
+import { NavigationProps } from '../types/NavigationProps';
 
-type Props = NativeStackScreenProps<RootStackParamList>;
-type RootStackParamList = {
-    AddEvidence: undefined;
-};
 
-export default function AddEvidence({ navigation }: Props) {
+
+export default function AddEvidence({ navigation }: NavigationProps) {
     return (
         <>
             <View style={{ flex: 1, marginTop: 50, marginHorizontal: 25 }}>
                 <HStack>
                     <IconButton
-                    mr={4}
+                        mr={4}
                         onPress={() => {
                             navigation.goBack()
                         }}
@@ -73,6 +71,7 @@ export default function AddEvidence({ navigation }: Props) {
 
                 {/* File assignment */}
                 <Pressable onPress={() => {
+                    navigation.navigate("FileUploadEvidence")
                 }}>
                     {({ isHovered, isFocused, isPressed }) => {
                         return (
