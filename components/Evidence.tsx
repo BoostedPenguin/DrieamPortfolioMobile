@@ -3,8 +3,13 @@ import { Platform } from 'react-native';
 import { IconButton, Image, Text, View, HStack, Button, Icon, Box, VStack } from "native-base";
 import { MaterialIcons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-export default function Evidence() {
+type Props = NativeStackScreenProps<RootStackParamList>;
+type RootStackParamList = {
+    AddEvidence: undefined;
+};
+export default function Evidence({ navigation }: Props) {
     return (
         <>
             <View style={{ flex: 1, alignItems: 'center', marginTop: 50, marginHorizontal: 25 }}>
@@ -17,7 +22,7 @@ export default function Evidence() {
                     borderStyle={"dashed"}
                     variant="outline"
                     onPress={() => {
-
+                        navigation.navigate("AddEvidence")
                     }}
                     leftIcon={<Icon color="#1890ff" as={MaterialIcons} name="add" size="sm" />}
                 >Add evidence</Button>
@@ -80,8 +85,8 @@ export default function Evidence() {
                     </HStack>
                 </Box>
 
-                                {/* Evidence */}
-                                <Box mt={5}>
+                {/* Evidence */}
+                <Box mt={5}>
                     <HStack justifyContent={"space-between"}>
                         <AntDesign style={{
                             marginRight: 10,
@@ -138,8 +143,8 @@ export default function Evidence() {
                     </HStack>
                 </Box>
 
-                                {/* Evidence */}
-                                <Box mt={5}>
+                {/* Evidence */}
+                <Box mt={5}>
                     <HStack justifyContent={"space-between"}>
                         <AntDesign style={{
                             marginRight: 10,
