@@ -26,7 +26,8 @@
     "recoil": "^0.7.6",
     "react-native-gesture-handler": "~2.5.0",
     "react-native-reanimated": "~2.9.1",
-    "expo-document-picker": "~10.3.0"
+    "expo-document-picker": "~10.3.0",
+    "expo-camera": "~12.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

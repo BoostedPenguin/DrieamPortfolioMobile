@@ -70,7 +70,7 @@ export default function AddEvidence({ navigation }: NavigationProps) {
 
                 {/* Image upload */}
                 <Pressable onPress={() => {
-                    navigation.navigate("FileUploadEvidence")
+                    navigation.navigate("ImageUploadEvidence")
                 }}>
                     {({ isHovered, isFocused, isPressed }) => {
                         return (
