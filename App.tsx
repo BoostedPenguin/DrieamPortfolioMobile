@@ -9,6 +9,7 @@ import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navig
 import AddEvidence from './components/AddEvidence';
 import FileUploadEvidence from './components/FileUploadEvidence';
 import ImageUploadEvidence from './components/ImageUploadEvidence';
+import VideoUploadEvidence from './components/VideoUploadEvidence';
 
 function Profile() {
   return (
@@ -72,6 +73,7 @@ export default function App() {
           <Stack.Screen name="AddEvidence" options={{ headerShown: false }} component={AddEvidence} />
           <Stack.Screen name="FileUploadEvidence" options={{ headerShown: false }} component={FileUploadEvidence} />
           <Stack.Screen name="ImageUploadEvidence" options={{ headerShown: false }} component={ImageUploadEvidence} />
+          <Stack.Screen name="VideoUploadEvidence" options={{ headerShown: false }} component={VideoUploadEvidence} />
         </Stack.Navigator>
 
       </NavigationContainer>

@@ -5,4 +5,5 @@ export type RootStackParamList = {
     AddEvidence: undefined;
     FileUploadEvidence: undefined;
     ImageUploadEvidence: undefined;
+    VideoUploadEvidence: undefined;
 };

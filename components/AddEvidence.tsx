@@ -94,7 +94,7 @@ export default function AddEvidence({ navigation }: NavigationProps) {
 
                 {/* Video upload */}
                 <Pressable onPress={() => {
-                    navigation.navigate("FileUploadEvidence")
+                    navigation.navigate("VideoUploadEvidence")
                 }}>
                     {({ isHovered, isFocused, isPressed }) => {
                         return (

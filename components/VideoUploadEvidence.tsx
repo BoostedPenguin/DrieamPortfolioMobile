@@ -148,7 +148,7 @@ export default function ImageUploadEvidence({ navigation }: NavigationProps) {
                             width: 75,
                             height: 75,
                             borderRadius: 50,
-                            backgroundColor: '#fff'
+                            backgroundColor: '#FF0A0A'
                         }} />
 
                     </TouchableOpacity>
