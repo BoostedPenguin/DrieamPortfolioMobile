@@ -116,6 +116,30 @@ export default function AddEvidence({ navigation }: NavigationProps) {
                     }}
                 </Pressable>
 
+                {/* Voice upload */}
+                <Pressable onPress={() => {
+                    navigation.navigate("VoiceUploadEvidence")
+                }}>
+                    {({ isHovered, isFocused, isPressed }) => {
+                        return (
+                            <Box my={4} p={3} bg={isPressed ? "#DADADA" : "#F2F2F2"} style={{
+                                elevation: 1,
+                            }}>
+                                <HStack>
+                                    <AntDesign style={{
+                                        marginRight: 10,
+                                        alignSelf: "center",
+                                    }} name="sound" size={24} color="#368A85" />
+                                    <VStack>
+                                        <Text fontWeight={"bold"}>Capture voice</Text>
+                                        <Text>Upload voice evidence from the phone</Text>
+                                    </VStack>
+                                </HStack>
+                            </Box>
+                        )
+                    }}
+                </Pressable>
+
 
                 {/* File assignment */}
                 <Pressable onPress={() => {

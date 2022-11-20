@@ -10,6 +10,7 @@ import AddEvidence from './components/AddEvidence';
 import FileUploadEvidence from './components/FileUploadEvidence';
 import ImageUploadEvidence from './components/ImageUploadEvidence';
 import VideoUploadEvidence from './components/VideoUploadEvidence';
+import VoiceUploadEvidence from './components/VoiceUploadEvidence';
 
 function Profile() {
   return (
@@ -74,6 +75,7 @@ export default function App() {
           <Stack.Screen name="FileUploadEvidence" options={{ headerShown: false }} component={FileUploadEvidence} />
           <Stack.Screen name="ImageUploadEvidence" options={{ headerShown: false }} component={ImageUploadEvidence} />
           <Stack.Screen name="VideoUploadEvidence" options={{ headerShown: false }} component={VideoUploadEvidence} />
+          <Stack.Screen name="VoiceUploadEvidence" options={{ headerShown: false }} component={VoiceUploadEvidence} />
         </Stack.Navigator>
 
       </NavigationContainer>
