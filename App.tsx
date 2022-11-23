@@ -32,7 +32,7 @@ const headerColors = {
 
 function MyDrawer() {
   return (
-    <Drawer.Navigator useLegacyImplementation initialRouteName="MyPortfolio">
+    <Drawer.Navigator useLegacyImplementation initialRouteName="Evidence">
       <Drawer.Screen
         name="My Portfolio"
         component={MyPortfolio}
@@ -44,11 +44,6 @@ function MyDrawer() {
         name="Evidence"
         component={Evidence}
         options={{ drawerLabel: 'Evidence', ...headerColors }}
-      />
-      <Drawer.Screen
-        name="Profile"
-        component={Profile}
-        options={{ drawerLabel: 'Profile', ...headerColors }}
       />
     </Drawer.Navigator>
   );
