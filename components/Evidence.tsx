@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Platform } from 'react-native';
-import { IconButton, Image, Text, View, HStack, Button, Icon, Box, VStack } from "native-base";
+import { IconButton, Image, Text, View, HStack, Button, Icon, Box, VStack, ScrollView } from "native-base";
 import { MaterialIcons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -13,12 +13,9 @@ type RootStackParamList = {
     AddEvidence: undefined;
 };
 export default function Evidence({ navigation }: Props) {
-    const client = createClient({
-        bearerToken: "YOUR_TOKEN", 
-        portfolioId: 4080,
-    });
+    const client = createClient();
 
-    const [evidences, setEvidences] = useState<z.infer<typeof EvidenceSchema>[]>([]); 
+    const [evidences, setEvidences] = useState<z.infer<typeof EvidenceSchema>[]>([]);
 
     useEffect(() => {
         client.evidence.getAll().then((evidences) => {
@@ -46,63 +43,65 @@ export default function Evidence({ navigation }: Props) {
                     }}
                     leftIcon={<Icon color="#1890ff" as={MaterialIcons} name="add" size="sm" />}
                 >Add evidence</Button>
+                <ScrollView w="100%">
 
-                {evidences.map((evidence) => ( <Box mt={5}>
-                    <HStack justifyContent={"space-between"}>
-                        <AntDesign style={{
-                            marginRight: 10,
-                            alignSelf: "center",
-                        }} name="file1" size={24} color="#79d24d" />
-                        <VStack mr={3}>
-                            <Text color={"#1890ff"}>
-                                {evidence.name}
-                            </Text>
-                            <Text color={"#000000a6"}>
-                                Upload date:
-                            </Text>
-                            <Text color={"#000000a6"}>
-                                {evidence.created_at.split('T')[0]}
-                            </Text>
-                        </VStack>
-                        <VStack>
-                            <Button
-                                size="sm"
-                                borderColor="#1890ff"
-                                variant="outline"
+                    {evidences.map((evidence) => (<Box mt={5}>
+                        <HStack justifyContent={"space-between"}>
+                            <AntDesign style={{
+                                marginRight: 10,
+                                alignSelf: "center",
+                            }} name="file1" size={24} color="#79d24d" />
+                            <VStack mr={3}>
+                                <Text color={"#1890ff"}>
+                                    {evidence.name}
+                                </Text>
+                                <Text color={"#000000a6"}>
+                                    Upload date:
+                                </Text>
+                                <Text color={"#000000a6"}>
+                                    {evidence.created_at.split('T')[0]}
+                                </Text>
+                            </VStack>
+                            <VStack>
+                                <Button
+                                    size="sm"
+                                    borderColor="#1890ff"
+                                    variant="outline"
+                                    onPress={() => {
+
+                                    }}
+                                    leftIcon={<Icon color="#1890ff" as={MaterialIcons} name="add" size="sm" />}
+                                >
+                                    Collection
+                                </Button>
+                                <Box textAlign={"center"} borderWidth={1} borderColor={"#fff"}>
+                                    <HStack alignItems={"center"} p={1}>
+                                        <Box width={2} borderRadius={50} height={2} backgroundColor={"orange.500"} />
+                                        <Text>My Collection</Text>
+                                    </HStack>
+                                </Box>
+                            </VStack>
+                            <IconButton
                                 onPress={() => {
 
                                 }}
-                                leftIcon={<Icon color="#1890ff" as={MaterialIcons} name="add" size="sm" />}
-                            >
-                                Collection
-                            </Button>
-                            <Box textAlign={"center"} borderWidth={1} borderColor={"#fff"}>
-                                <HStack alignItems={"center"} p={1}>
-                                    <Box width={2} borderRadius={50} height={2} backgroundColor={"orange.500"} />
-                                    <Text>My Collection</Text>
-                                </HStack>
-                            </Box>
-                        </VStack>
-                        <IconButton
-                            onPress={() => {
-
-                            }}
-                            style={{
-                                alignSelf: "center",
-                            }}
-                            size="sm"
-                            ml={2}
-                            borderColor="#000"
-                            variant="outline"
-                            _icon={{
-                                as: AntDesign,
-                                size: "sm",
-                                name: "delete",
-                                color: "#000"
-                            }}
-                        />
-                    </HStack>
-                </Box>))}
+                                style={{
+                                    alignSelf: "center",
+                                }}
+                                size="sm"
+                                ml={2}
+                                borderColor="#000"
+                                variant="outline"
+                                _icon={{
+                                    as: AntDesign,
+                                    size: "sm",
+                                    name: "delete",
+                                    color: "#000"
+                                }}
+                            />
+                        </HStack>
+                    </Box>))}
+                </ScrollView>
 
                 {/* Evidence */}
                 {/* <Box mt={5}>

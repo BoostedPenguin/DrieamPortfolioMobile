@@ -11,6 +11,7 @@ import { NavigationProps } from '../types/NavigationProps';
 import * as DocumentPicker from 'expo-document-picker';
 import { Camera, CameraCapturedPicture, CameraType } from 'expo-camera';
 import { StyleSheet, TouchableOpacity } from 'react-native';
+import { configFiles } from '../sdk';
 
 
 const styles = StyleSheet.create({
@@ -31,15 +32,51 @@ const styles = StyleSheet.create({
 });
 
 export default function ImageUploadEvidence({ navigation }: NavigationProps) {
-
     //  camera permissions
     const [hasCameraPermission, setHasCameraPermission] = useState<boolean | null>(null);
     const [camera, setCamera] = useState<Camera | null>(null);
 
+    const [evidenceName, setEvidenceName] = useState("")
+
     const [capturedImage, setCapturedImage] = useState<CameraCapturedPicture | null>()
 
+    async function addPictureEvidence() {
+        if (!capturedImage) return
+
+        let localUri = capturedImage.uri;
+        let filename = localUri.split('/').pop();
+
+        if (!filename) return
+
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+        let formData = new FormData();
+
+        
+        //@ts-ignore
+        formData.append('files[]', { uri: localUri, name: filename, type });
+        formData.append('evidence_type', 'file');
+        formData.append('name', evidenceName);
+        //formData.append('collection_ids[]', configFiles.portfolioId);
+
+
+        const res = await fetch(`https://portfolio.drieam.app/api/v1/portfolios/${configFiles.portfolioId}/evidence`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'content-type': 'multipart/form-data',
+                Authorization: `Bearer ${configFiles.bearerToken}`,
+                'X-CSRF-Token': configFiles.XCSRF
+            },
+        }).catch(ex => console.log(ex))
+
+        console.log(res)
+
+        navigation.navigate("Home")
+    }
     async function takePicture() {
-        if(!camera) return
+        if (!camera) return
         const photo = await camera.takePictureAsync()
         console.log(photo)
         setCapturedImage(photo)
@@ -67,7 +104,7 @@ export default function ImageUploadEvidence({ navigation }: NavigationProps) {
         let desiredRatio = '4:3';  // Start with the system default
         // This issue only affects Android
         if (Platform.OS === 'android') {
-            if(!camera) return
+            if (!camera) return
             const ratios = await camera.getSupportedRatiosAsync();
 
             // Calculate the width/height of each of the supported camera ratios
@@ -113,60 +150,60 @@ export default function ImageUploadEvidence({ navigation }: NavigationProps) {
         }
     };
 
-    if(capturedImage) {
+    if (capturedImage) {
         return (
             <>
-            <View style={{ flex: 1, marginTop: 50, marginHorizontal: 25 }}>
-                <HStack>
-                    <IconButton
-                        mr={4}
-                        onPress={() => {
-                            navigation.goBack()
-                        }}
-                        style={{
-                            alignSelf: "center",
-                        }}
-                        size="sm"
-                        borderColor="#797979"
-                        variant="outline"
-                        _icon={{
-                            as: AntDesign,
-                            size: "sm",
-                            name: "left",
-                            color: "#000"
-                        }}
-                    />
+                <View style={{ flex: 1, marginTop: 50, marginHorizontal: 25 }}>
+                    <HStack>
+                        <IconButton
+                            mr={4}
+                            onPress={() => {
+                                navigation.goBack()
+                            }}
+                            style={{
+                                alignSelf: "center",
+                            }}
+                            size="sm"
+                            borderColor="#797979"
+                            variant="outline"
+                            _icon={{
+                                as: AntDesign,
+                                size: "sm",
+                                name: "left",
+                                color: "#000"
+                            }}
+                        />
 
-                    <VStack>
-                        <Text fontSize={"lg"}>Add image upload evidence</Text>
+                        <VStack>
+                            <Text fontSize={"lg"}>Add image upload evidence</Text>
+                        </VStack>
+                    </HStack>
+
+                    <VStack mt={5}>
+                        <Text>Name</Text>
+                        <Input onChangeText={e => setEvidenceName(e)} placeholder='Name your evidence...'></Input>
+
+                        {capturedImage &&
+                            // <Box borderWidth={1} p={2} borderColor="#797979">
+                            //     <HStack>
+                            //         <MaterialIcons name="attach-file" size={24} color="black" />
+                            //         <Text>{file.name}</Text>
+                            //     </HStack>
+                            // </Box>
+                            <Image style={{
+                                height: 200,
+                                marginVertical: 5,
+                                alignContent: "center",
+                                justifyContent: "center",
+                                resizeMode: "contain"
+                            }} alt="" source={{
+                                uri: capturedImage.uri
+                            }} />
+                        }
+                        <Button mt={2} onPress={addPictureEvidence}>Add</Button>
                     </VStack>
-                </HStack>
-
-                <VStack mt={5}>
-                    <Text>Name</Text>
-                    <Input placeholder='Name your evidence...'></Input>
-
-                    {capturedImage &&
-                        // <Box borderWidth={1} p={2} borderColor="#797979">
-                        //     <HStack>
-                        //         <MaterialIcons name="attach-file" size={24} color="black" />
-                        //         <Text>{file.name}</Text>
-                        //     </HStack>
-                        // </Box>
-                        <Image style={{
-                            height: 200,
-                            marginVertical: 5,
-                            alignContent: "center",
-                            justifyContent: "center",
-                            resizeMode: "contain"
-                        }} alt="" source={{
-                            uri: capturedImage.uri
-                        }} />
-                    }
-                    <Button mt={2}>Add</Button>
-                </VStack>
-            </View>
-        </>
+                </View>
+            </>
         )
     }
 
