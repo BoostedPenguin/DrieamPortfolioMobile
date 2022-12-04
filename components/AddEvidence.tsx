@@ -46,7 +46,7 @@ export default function AddEvidence({ navigation }: NavigationProps) {
 
 
                 {/* Canvas assignment */}
-                <Pressable onPress={() => {
+                {false && <Pressable onPress={() => {
                 }}>
                     {({ isHovered, isFocused, isPressed }) => {
                         return (
@@ -61,6 +61,78 @@ export default function AddEvidence({ navigation }: NavigationProps) {
                                     <VStack>
                                         <Text fontWeight={"bold"}>Canvas assignment</Text>
                                         <Text>Upload your assignment submission, including feedback, directly from a Canvas course</Text>
+                                    </VStack>
+                                </HStack>
+                            </Box>
+                        )
+                    }}
+                </Pressable>}
+
+                {/* Image upload */}
+                <Pressable onPress={() => {
+                    navigation.navigate("ImageUploadEvidence")
+                }}>
+                    {({ isHovered, isFocused, isPressed }) => {
+                        return (
+                            <Box my={4} p={3} bg={isPressed ? "#DADADA" : "#F2F2F2"} style={{
+                                elevation: 1,
+                            }}>
+                                <HStack>
+                                    <AntDesign style={{
+                                        marginRight: 10,
+                                        alignSelf: "center",
+                                    }} name="camera" size={24} color="#368A85" />
+                                    <VStack>
+                                        <Text fontWeight={"bold"}>Take picture</Text>
+                                        <Text>Upload evidence directly from the camera</Text>
+                                    </VStack>
+                                </HStack>
+                            </Box>
+                        )
+                    }}
+                </Pressable>
+
+                {/* Video upload */}
+                <Pressable onPress={() => {
+                    navigation.navigate("VideoUploadEvidence")
+                }}>
+                    {({ isHovered, isFocused, isPressed }) => {
+                        return (
+                            <Box my={4} p={3} bg={isPressed ? "#DADADA" : "#F2F2F2"} style={{
+                                elevation: 1,
+                            }}>
+                                <HStack>
+                                    <AntDesign style={{
+                                        marginRight: 10,
+                                        alignSelf: "center",
+                                    }} name="videocamera" size={24} color="#368A85" />
+                                    <VStack>
+                                        <Text fontWeight={"bold"}>Capture video</Text>
+                                        <Text>Upload video evidence from the camera</Text>
+                                    </VStack>
+                                </HStack>
+                            </Box>
+                        )
+                    }}
+                </Pressable>
+
+                {/* Voice upload */}
+                <Pressable onPress={() => {
+                    navigation.navigate("VoiceUploadEvidence")
+                }}>
+                    {({ isHovered, isFocused, isPressed }) => {
+                        return (
+                            <Box my={4} p={3} bg={isPressed ? "#DADADA" : "#F2F2F2"} style={{
+                                elevation: 1,
+                            }}>
+                                <HStack>
+                                    <AntDesign style={{
+                                        marginRight: 10,
+                                        alignSelf: "center",
+                                    }} name="sound" size={24} color="#368A85" />
+                                    <VStack>
+                                        <Text fontWeight={"bold"}>Capture voice</Text>
+                                        <Text>Upload voice evidence from the phone</Text>
                                     </VStack>
                                 </HStack>
                             </Box>
