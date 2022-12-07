@@ -97,11 +97,9 @@ export default function VoiceUploadEvidence({ navigation }: NavigationProps) {
           "X-CSRF-Token": configFiles.XCSRF,
         },
       }
-    ).catch((error) => console.log(error));
+    ).catch((error) => {});
 
-    console.log(result);
-
-    navigation.navigate("Home");
+    navigation.replace("Home");
   };
 
   return (
