@@ -4,9 +4,10 @@ import { IconButton, Image, Text, View, HStack, Button, Icon, Box, VStack, Scrol
 import { MaterialIcons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { createClient } from '../sdk';
+import { configFiles, createClient } from '../sdk';
 import { z } from 'zod';
 import { EvidenceSchema } from '../sdk/evidence';
+import { useIsFocused } from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<RootStackParamList>;
 type RootStackParamList = {
@@ -16,16 +17,29 @@ export default function Evidence({ navigation }: Props) {
     const client = createClient();
 
     const [evidences, setEvidences] = useState<z.infer<typeof EvidenceSchema>[]>([]);
+    const isFocused = useIsFocused()
 
     useEffect(() => {
         client.evidence.getAll().then((evidences) => {
             setEvidences(evidences);
         });
-    }, []);
+    }, [isFocused])
 
-    useEffect(() => {
-        console.log(evidences);
-    }, [evidences]);
+
+
+    const deleteEvidence = async (evidenceId: number) => {
+        const res = await fetch(`https://portfolio.drieam.app/api/v1/evidence/${evidenceId}`, {
+            method: 'DELETE',
+            headers: {
+                'content-type': 'application/json',
+                Authorization: `Bearer ${configFiles.bearerToken}`,
+                'X-CSRF-Token': configFiles.XCSRF
+            },
+        }).catch(ex => console.log(ex))
+        const evidences = await client.evidence.getAll()
+        setEvidences(evidences);
+    }
+
 
     return (
         <>
@@ -45,7 +59,7 @@ export default function Evidence({ navigation }: Props) {
                 >Add evidence</Button>
                 <ScrollView w="100%">
 
-                    {evidences.map((evidence) => (<Box mt={5}>
+                    {evidences.map((evidence) => (<Box key={evidence.id} mt={5}>
                         <HStack justifyContent={"space-between"}>
                             <AntDesign style={{
                                 marginRight: 10,
@@ -83,7 +97,7 @@ export default function Evidence({ navigation }: Props) {
                             </VStack>
                             <IconButton
                                 onPress={() => {
-
+                                    deleteEvidence(evidence.id)
                                 }}
                                 style={{
                                     alignSelf: "center",
