@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Platform } from 'react-native';
+import { Platform, ToastAndroid } from 'react-native';
 import { IconButton, Image, Text, View, HStack, Button, Icon, Box, VStack, ScrollView } from "native-base";
 import { MaterialIcons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons';
@@ -82,7 +82,7 @@ export default function Evidence({ navigation }: Props) {
                                     borderColor="#1890ff"
                                     variant="outline"
                                     onPress={() => {
-
+                                        ToastAndroid.show('Not available during demo', ToastAndroid.SHORT);
                                     }}
                                     leftIcon={<Icon color="#1890ff" as={MaterialIcons} name="add" size="sm" />}
                                 >

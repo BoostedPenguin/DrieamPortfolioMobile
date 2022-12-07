@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Platform } from 'react-native';
+import { Platform, ToastAndroid } from 'react-native';
 import { IconButton, Image, Text, View, HStack, Button, Icon, Box, VStack, Pressable } from "native-base";
 import { MaterialIcons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons';
@@ -168,6 +168,7 @@ export default function AddEvidence({ navigation }: NavigationProps) {
 
                 {/* Add link assignment */}
                 <Pressable onPress={() => {
+                    ToastAndroid.show('Not available during demo', ToastAndroid.SHORT);
                 }}>
                     {({ isHovered, isFocused, isPressed }) => {
                         return (
@@ -192,6 +193,7 @@ export default function AddEvidence({ navigation }: NavigationProps) {
 
                 {/* Free text assignment */}
                 <Pressable onPress={() => {
+                    ToastAndroid.show('Not available during demo', ToastAndroid.SHORT);
                 }}>
                     {({ isHovered, isFocused, isPressed }) => {
                         return (

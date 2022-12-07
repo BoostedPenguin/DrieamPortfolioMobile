@@ -9,6 +9,7 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Entypo } from '@expo/vector-icons';
 import { NavigationProps } from '../types/NavigationProps';
 import * as DocumentPicker from 'expo-document-picker';
+import { configFiles } from '../sdk';
 
 export default function FileUploadEvidence({ navigation }: NavigationProps) {
     const [file, setFile] = useState<DocumentPicker.DocumentResult>()
@@ -19,6 +20,43 @@ export default function FileUploadEvidence({ navigation }: NavigationProps) {
             return
 
         setFile(document)
+    }
+
+    async function UploadFile() {
+
+        
+        let formData = new FormData();
+
+        if(!file || file?.type == 'cancel') return
+
+
+        let localUri = file.uri;
+        let filename = localUri.split('/').pop();
+
+        if (!filename) return
+
+        let match = /\.(\w+)$/.exec(filename);
+        let type = match ? `image/${match[1]}` : `image`;
+
+        //@ts-ignore
+        formData.append('files[]', { uri: file.uri, name: filename, type });
+        formData.append('evidence_type', 'file');
+        formData.append('name', file.name);
+
+        
+        const res = await fetch(`https://portfolio.drieam.app/api/v1/portfolios/${configFiles.portfolioId}/evidence`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'content-type': 'multipart/form-data',
+                Authorization: `Bearer ${configFiles.bearerToken}`,
+                'X-CSRF-Token': configFiles.XCSRF
+            },
+        }).catch(ex => console.log(ex))
+
+        console.log(res)
+
+        navigation.navigate("Home")
     }
 
     // useEffect(() => {
@@ -77,7 +115,7 @@ export default function FileUploadEvidence({ navigation }: NavigationProps) {
                             </HStack>
                         </Box>
                     }
-                    <Button mt={2}>Add</Button>
+                    <Button mt={2} onPress={UploadFile}>Add</Button>
                 </VStack>
             </View>
         </>
