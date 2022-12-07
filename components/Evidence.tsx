@@ -11,10 +11,10 @@ import { useIsFocused } from '@react-navigation/native';
 
 type Props = NativeStackScreenProps<RootStackParamList>;
 type RootStackParamList = {
-    AddEvidence: undefined;
+  AddEvidence: undefined;
 };
 export default function Evidence({ navigation }: Props) {
-    const client = createClient();
+  const client = createClient();
 
     const [evidences, setEvidences] = useState<z.infer<typeof EvidenceSchema>[]>([]);
     const isFocused = useIsFocused()
@@ -50,14 +50,55 @@ export default function Evidence({ navigation }: Props) {
                     width="full"
                     px={5}
                     borderColor="#1890ff"
-                    borderStyle={"dashed"}
                     variant="outline"
-                    onPress={() => {
-                        navigation.navigate("AddEvidence")
-                    }}
-                    leftIcon={<Icon color="#1890ff" as={MaterialIcons} name="add" size="sm" />}
-                >Add evidence</Button>
-                <ScrollView w="100%">
+                    onPress={() => {}}
+                    leftIcon={
+                      <Icon
+                        color="#1890ff"
+                        as={MaterialIcons}
+                        name="add"
+                        size="sm"
+                      />
+                    }
+                  >
+                    Collection
+                  </Button>
+                  <Box
+                    textAlign={"center"}
+                    borderWidth={1}
+                    borderColor={"#fff"}
+                  >
+                    <HStack alignItems={"center"} p={1}>
+                      <Box
+                        width={2}
+                        borderRadius={50}
+                        height={2}
+                        backgroundColor={"orange.500"}
+                      />
+                      <Text>My Collection</Text>
+                    </HStack>
+                  </Box>
+                </VStack>
+                <IconButton
+                  onPress={() => {}}
+                  style={{
+                    alignSelf: "center",
+                  }}
+                  size="sm"
+                  ml={2}
+                  borderColor="#000"
+                  variant="outline"
+                  _icon={{
+                    as: AntDesign,
+                    size: "sm",
+                    name: "delete",
+                    color: "#000",
+                  }}
+                />
+              </HStack>
+            </Box>
+          ))}
+        </ScrollView>
 
                     {evidences.map((evidence) => (<Box key={evidence.id} mt={5}>
                         <HStack justifyContent={"space-between"}>
@@ -175,8 +216,8 @@ export default function Evidence({ navigation }: Props) {
                     </HStack>
                 </Box> */}
 
-                {/* Evidence */}
-                {/* <Box mt={5}>
+        {/* Evidence */}
+        {/* <Box mt={5}>
                     <HStack justifyContent={"space-between"}>
                         <AntDesign style={{
                             marginRight: 10,
@@ -232,7 +273,7 @@ export default function Evidence({ navigation }: Props) {
                         />
                     </HStack>
                 </Box> */}
-            </View>
-        </>
-    )
+      </View>
+    </>
+  );
 }
