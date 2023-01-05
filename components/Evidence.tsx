@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Platform, ToastAndroid } from 'react-native';
+import { Platform, Pressable, ToastAndroid } from 'react-native';
 import { IconButton, Image, Text, View, HStack, Button, Icon, Box, VStack, ScrollView, Modal } from "native-base";
 import { MaterialIcons } from '@expo/vector-icons'
 import { AntDesign } from '@expo/vector-icons';
@@ -8,11 +8,9 @@ import { configFiles, createClient } from '../sdk';
 import { z } from 'zod';
 import { EvidenceSchema } from '../sdk/evidence';
 import { useIsFocused } from '@react-navigation/native';
+import { RootStackParamList } from '../types/NavigationProps';
 
 type Props = NativeStackScreenProps<RootStackParamList>;
-type RootStackParamList = {
-    AddEvidence: undefined;
-};
 export default function Evidence({ navigation }: Props) {
     const client = createClient();
 
@@ -73,21 +71,31 @@ export default function Evidence({ navigation }: Props) {
 
                     {evidences.map((evidence) => (<Box key={evidence.id} mt={5}>
                         <HStack justifyContent={"space-between"}>
-                            <AntDesign style={{
-                                marginRight: 10,
-                                alignSelf: "center",
-                            }} name="file1" size={24} color="#79d24d" />
-                            <VStack mr={3}>
-                                <Text color={"#1890ff"}>
-                                    {evidence.name.length > 8 ? evidence.name.slice(0, 8) + "..." : evidence.name}
-                                </Text>
-                                <Text color={"#000000a6"}>
-                                    Upload date:
-                                </Text>
-                                <Text color={"#000000a6"}>
-                                    {evidence.created_at.split('T')[0]}
-                                </Text>
-                            </VStack>
+                            <Pressable onPress={() => {
+                                navigation.navigate("EvidencePreview", {
+                                    evidenceId: evidence.id
+                                })
+                            }}>
+                                <HStack justifyContent={"space-between"}>
+
+                                    <AntDesign style={{
+                                        marginRight: 10,
+                                        alignSelf: "center",
+                                    }} name="file1" size={24} color="#79d24d" />
+                                    <VStack mr={3}>
+                                        <Text color={"#1890ff"}>
+                                            {evidence.name.length > 10 ? evidence.name.slice(0, 10) + "..." : evidence.name}
+                                        </Text>
+                                        <Text color={"#000000a6"}>
+                                            Upload date:
+                                        </Text>
+                                        <Text color={"#000000a6"}>
+                                            {evidence.created_at.split('T')[0]}
+                                        </Text>
+                                    </VStack>
+                                </HStack>
+                            </Pressable>
+
                             <VStack>
                                 <Button
                                     size="sm"

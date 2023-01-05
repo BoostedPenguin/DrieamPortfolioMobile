@@ -12,6 +12,8 @@ import ImageUploadEvidence from './components/ImageUploadEvidence';
 import VideoUploadEvidence from './components/VideoUploadEvidence';
 import VoiceUploadEvidence from './components/VoiceUploadEvidence';
 import { LogBox } from 'react-native';
+import PreviewEvidence from './components/PreviewEvidence';
+import { RootStackParamList } from './types/NavigationProps';
 
 function Profile() {
   return (
@@ -23,7 +25,7 @@ function Profile() {
 LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
 LogBox.ignoreAllLogs();//Ignore all log notifications
 const Drawer = createDrawerNavigator();
-const Stack = createNativeStackNavigator()
+const Stack = createNativeStackNavigator<RootStackParamList>()
 
 const headerColors = {
   headerStyle: {
@@ -73,6 +75,7 @@ export default function App() {
           <Stack.Screen name="ImageUploadEvidence" options={{ headerShown: false }} component={ImageUploadEvidence} />
           <Stack.Screen name="VideoUploadEvidence" options={{ headerShown: false }} component={VideoUploadEvidence} />
           <Stack.Screen name="VoiceUploadEvidence" options={{ headerShown: false }} component={VoiceUploadEvidence} />
+          <Stack.Screen name="EvidencePreview" options={{ headerShown: false }} component={PreviewEvidence} />
         </Stack.Navigator>
 
       </NavigationContainer>
