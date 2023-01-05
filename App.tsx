@@ -11,6 +11,7 @@ import FileUploadEvidence from './components/FileUploadEvidence';
 import ImageUploadEvidence from './components/ImageUploadEvidence';
 import VideoUploadEvidence from './components/VideoUploadEvidence';
 import VoiceUploadEvidence from './components/VoiceUploadEvidence';
+import { LogBox } from 'react-native';
 
 function Profile() {
   return (
@@ -19,7 +20,8 @@ function Profile() {
     </View>
   );
 }
-
+LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+LogBox.ignoreAllLogs();//Ignore all log notifications
 const Drawer = createDrawerNavigator();
 const Stack = createNativeStackNavigator()
 

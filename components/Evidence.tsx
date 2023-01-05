@@ -67,7 +67,7 @@ export default function Evidence({ navigation }: Props) {
                             }} name="file1" size={24} color="#79d24d" />
                             <VStack mr={3}>
                                 <Text color={"#1890ff"}>
-                                    {evidence.name}
+                                    {evidence.name.length > 8 ? evidence.name.slice(0, 8) + "..." : evidence.name}
                                 </Text>
                                 <Text color={"#000000a6"}>
                                     Upload date:
