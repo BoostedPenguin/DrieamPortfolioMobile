@@ -68,7 +68,50 @@ export default function VoiceUploadEvidence({ navigation }: NavigationProps) {
     }
   };
 
+  const saveTranscription = async () => {
+    try {
+      const formData = new FormData();
+
+      formData.append("data_file", {
+        //@ts-ignore
+        uri: recordingUri,
+        name: evidenceName + ".m4a",
+        type: "audio",
+      });
+
+      formData.append(
+        "config",
+        JSON.stringify({
+          type: "transcription",
+          transcription_config: {
+            language: "en",
+          },
+        })
+      );
+
+      const responseUpload = await fetch(
+        "https://asr.api.speechmatics.com/v2/jobs/",
+        {
+          method: "POST",
+          body: formData,
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer OOFj76JSRhyomKGxCejXwomyY97xeECM`,
+          },
+        }
+      );
+
+      const data = await responseUpload.json();
+
+      return data.id;
+    } catch (error) {
+      console.log("ERROR", error);
+    }
+  };
+
   const sendEvidence = async () => {
+    const transcriptionId = await saveTranscription();
+
     let formData = new FormData();
 
     formData.append("files[]", {
@@ -79,6 +122,7 @@ export default function VoiceUploadEvidence({ navigation }: NavigationProps) {
     });
     formData.append("evidence_type", "file");
     formData.append("name", `Voice - ${evidenceName}`);
+    formData.append("description", transcriptionId);
 
     await fetch(
       `https://portfolio.drieam.app/api/v1/portfolios/${configFiles.portfolioId}/evidence`,
