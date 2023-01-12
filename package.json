@@ -32,6 +32,7 @@
     "react-native-web": "~0.18.7",
     "recoil": "^0.7.6",
     "ts-node": "^10.9.1",
+    "use-elapsed-time": "^3.0.4",
     "zod": "^3.19.1"
   },
   "devDependencies": {

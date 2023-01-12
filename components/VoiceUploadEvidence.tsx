@@ -1,22 +1,22 @@
-import React, { useState } from "react";
+import { MaterialIcons } from "@expo/vector-icons";
+import { Audio } from "expo-av";
 import {
+  Button,
+  HStack,
   IconButton,
+  Input,
   Text,
   View,
-  HStack,
-  Button,
-  Box,
   VStack,
-  Pressable,
-  Input,
 } from "native-base";
-import { AntDesign } from "@expo/vector-icons";
-import { NavigationProps } from "../types/NavigationProps";
-import { FontAwesome } from "@expo/vector-icons";
-import { Audio } from "expo-av";
+import React, { useState } from "react";
+import { useElapsedTime } from "use-elapsed-time";
 import { configFiles } from "../sdk";
+import { NavigationProps } from "../types/NavigationProps";
 
 export default function VoiceUploadEvidence({ navigation }: NavigationProps) {
+  const [playing, setPlaying] = useState(false);
+
   const [evidenceName, setEvidenceName] = useState("");
 
   const [recording, setRecording] = useState<Audio.Recording | undefined>(
@@ -24,6 +24,8 @@ export default function VoiceUploadEvidence({ navigation }: NavigationProps) {
   );
 
   const [recordingUri, setRecordingUri] = useState<string | null>();
+
+  const { elapsedTime } = useElapsedTime({ isPlaying: playing });
 
   const startRecordingAudio = async () => {
     await Audio.requestPermissionsAsync();
@@ -54,22 +56,14 @@ export default function VoiceUploadEvidence({ navigation }: NavigationProps) {
     }
   };
 
-  const getRecordingText = () => {
-    if (recording !== undefined) {
-      return "Stop Recording";
-    }
-
-    if (recordingUri === undefined && recording === undefined) {
-      return "Start Recording";
-    }
-
-    return "Start New Recording";
-  };
-
   const onRecordButtonClick = async () => {
     if (recording) {
+      setPlaying(false);
+
       await stopRecordingAudio();
     } else {
+      setPlaying(true);
+
       await startRecordingAudio();
     }
   };
@@ -80,13 +74,13 @@ export default function VoiceUploadEvidence({ navigation }: NavigationProps) {
     formData.append("files[]", {
       //@ts-ignore
       uri: recordingUri,
-      name: evidenceName,
+      name: evidenceName + ".m4a",
       type: "audio",
     });
     formData.append("evidence_type", "file");
-    formData.append("name", evidenceName);
+    formData.append("name", `Voice - ${evidenceName}`);
 
-    const result = await fetch(
+    await fetch(
       `https://portfolio.drieam.app/api/v1/portfolios/${configFiles.portfolioId}/evidence`,
       {
         method: "POST",
@@ -97,75 +91,94 @@ export default function VoiceUploadEvidence({ navigation }: NavigationProps) {
           "X-CSRF-Token": configFiles.XCSRF,
         },
       }
-    ).catch((error) => {});
+    ).catch(() => {});
 
     navigation.replace("Home");
   };
 
-  return (
-    <>
-      <View style={{ flex: 1, marginTop: 50, marginHorizontal: 25 }}>
-        <HStack>
-          <IconButton
-            mr={4}
-            onPress={() => {
-              navigation.goBack();
-            }}
-            style={{
-              alignSelf: "center",
-            }}
-            size="sm"
-            borderColor="#797979"
-            variant="outline"
-            _icon={{
-              as: AntDesign,
-              size: "sm",
-              name: "left",
-              color: "#000",
-            }}
-          />
+  const getPlaceholderText = () => {
+    if ((recordingUri !== undefined && recordingUri !== null) || playing) {
+      const minutes = Math.floor(elapsedTime / 60);
 
-          <VStack>
-            <Text fontSize={"lg"}>Add voice upload evidence</Text>
+      const seconds = Math.floor(elapsedTime % 60);
+
+      return `${minutes.toString().padStart(2, "0")}:${seconds
+        .toString()
+        .padStart(2, "0")}`;
+    }
+
+    return "Record your evidence...";
+  };
+
+  const canUploadEvidence =
+    evidenceName !== "" && recordingUri !== undefined && recordingUri !== null;
+
+  return (
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: "#fff",
+      }}
+    >
+      <VStack>
+        <CustomInput
+          label="Name"
+          placeholder="Enter evidence name..."
+          onChangeText={setEvidenceName}
+        />
+
+        <HStack borderBottomWidth={1} borderColor="#e5e7eb" py={15} px={15}>
+          <VStack flexGrow={1}>
+            <Text mb={1}>Recording</Text>
+            <Text color="#a1a1aa" fontSize={16}>
+              {getPlaceholderText()}
+            </Text>
           </VStack>
+          <HStack>
+            <IconButton
+              icon={
+                <MaterialIcons
+                  name={playing ? "stop" : "keyboard-voice"}
+                  size={28}
+                />
+              }
+              onPress={async () => await onRecordButtonClick()}
+            />
+          </HStack>
         </HStack>
 
-        <VStack mt={5}>
-          <Text>Name</Text>
-          <Input
-            placeholder="Name your evidence..."
-            onChangeText={(value) => setEvidenceName(value)}
-          />
+        <View px={15} py={5}>
+          <Button
+            onPress={async () => await sendEvidence()}
+            disabled={!canUploadEvidence}
+            backgroundColor={!canUploadEvidence ? "#d1d5db" : "#1890FF"}
+          >
+            Add evidence
+          </Button>
+        </View>
+      </VStack>
+    </View>
+  );
+}
 
-          <Pressable onPress={async () => await onRecordButtonClick()}>
-            {({ isPressed }) => {
-              return (
-                <Box
-                  my={4}
-                  alignItems={"center"}
-                  justifyContent={"center"}
-                  borderColor="red.500"
-                  borderWidth={1}
-                  height={70}
-                  p={3}
-                  bg={isPressed ? "#DADADA" : "#F2F2F2"}
-                  style={{
-                    elevation: 1,
-                  }}
-                >
-                  <FontAwesome name="microphone" size={24} color="black" />
-                  <Text>{getRecordingText()}</Text>
-                </Box>
-              );
-            }}
-          </Pressable>
-          {recordingUri && (
-            <Button mt={2} onPress={async () => await sendEvidence()}>
-              Upload recording
-            </Button>
-          )}
-        </VStack>
-      </View>
-    </>
+interface CustomInputProps {
+  label: string;
+  placeholder: string;
+  onChangeText: (value: string) => void;
+}
+
+export function CustomInput(props: CustomInputProps) {
+  return (
+    <View borderBottomWidth={1} borderColor="#e5e7eb" py={15} px={15}>
+      <Text>{props.label}</Text>
+      <Input
+        size="lg"
+        variant="unstyled"
+        placeholder={props.placeholder}
+        onChangeText={props.onChangeText}
+        borderWidth={0}
+        px={0}
+      />
+    </View>
   );
 }

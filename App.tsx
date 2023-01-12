@@ -1,84 +1,89 @@
-import * as React from 'react';
-import { View, Text } from 'react-native';
-import { DefaultTheme, NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import MyPortfolio from './components/MyPortfolio';
-import { NativeBaseProvider } from 'native-base';
-import Evidence from './components/Evidence';
-import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack'
-import AddEvidence from './components/AddEvidence';
-import FileUploadEvidence from './components/FileUploadEvidence';
-import ImageUploadEvidence from './components/ImageUploadEvidence';
-import VideoUploadEvidence from './components/VideoUploadEvidence';
-import VoiceUploadEvidence from './components/VoiceUploadEvidence';
-import { LogBox } from 'react-native';
-import PreviewEvidence from './components/PreviewEvidence';
-import { RootStackParamList } from './types/NavigationProps';
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { NativeBaseProvider } from "native-base";
+import * as React from "react";
+import { LogBox } from "react-native";
+import Evidence from "./components/Evidence";
+import FileUploadEvidence from "./components/FileUploadEvidence";
+import ImageUploadEvidence from "./components/ImageUploadEvidence";
+import MyPortfolio from "./components/MyPortfolio";
+import PreviewEvidence from "./components/PreviewEvidence";
+import VideoUploadEvidence from "./components/VideoUploadEvidence";
+import VoiceUploadEvidence from "./components/VoiceUploadEvidence";
+import { RootStackParamList } from "./types/NavigationProps";
 
-function Profile() {
-  return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Profile Screen</Text>
-    </View>
-  );
-}
-LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
-LogBox.ignoreAllLogs();//Ignore all log notifications
+LogBox.ignoreLogs(["Warning: ..."]); // Ignore log notification by message
+LogBox.ignoreAllLogs(); //Ignore all log notifications
+
 const Drawer = createDrawerNavigator();
-const Stack = createNativeStackNavigator<RootStackParamList>()
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 const headerColors = {
   headerStyle: {
     backgroundColor: "#1890FF",
   },
-  headerTintColor: "#fff"
-}
+  headerTintColor: "#fff",
+};
 
 function MyDrawer() {
   return (
-    <Drawer.Navigator useLegacyImplementation initialRouteName="Evidence">
+    <Drawer.Navigator useLegacyImplementation initialRouteName="My evidence">
       <Drawer.Screen
         name="My Portfolio"
         component={MyPortfolio}
         options={{
-          drawerLabel: 'My portfolio', ...headerColors
+          drawerLabel: "My portfolio",
+          ...headerColors,
         }}
       />
       <Drawer.Screen
-        name="Evidence"
+        name="My evidence"
         component={Evidence}
-        options={{ drawerLabel: 'Evidence', ...headerColors }}
+        options={{ drawerLabel: "My evidence", ...headerColors }}
       />
     </Drawer.Navigator>
   );
 }
-const MyTheme = {
-  ...DefaultTheme,
-  colors: {
-    ...DefaultTheme.colors,
-    background: 'red'
-  },
-};
+
 export default function App() {
   return (
     <NativeBaseProvider>
       <NavigationContainer>
-
-        <Stack.Navigator >
+        <Stack.Navigator>
           <Stack.Screen
             name="Home"
             options={{ headerShown: false }}
             component={MyDrawer}
           />
-          <Stack.Screen name="AddEvidence" options={{ headerShown: false }} component={AddEvidence} />
-          <Stack.Screen name="FileUploadEvidence" options={{ headerShown: false }} component={FileUploadEvidence} />
-          <Stack.Screen name="ImageUploadEvidence" options={{ headerShown: false }} component={ImageUploadEvidence} />
-          <Stack.Screen name="VideoUploadEvidence" options={{ headerShown: false }} component={VideoUploadEvidence} />
-          <Stack.Screen name="VoiceUploadEvidence" options={{ headerShown: false }} component={VoiceUploadEvidence} />
-          <Stack.Screen name="EvidencePreview" options={{ headerShown: false }} component={PreviewEvidence} />
+          <Stack.Screen
+            name="FileUploadEvidence"
+            options={{ ...headerColors, title: "Add file evidence" }}
+            component={FileUploadEvidence}
+          />
+          <Stack.Screen
+            name="ImageUploadEvidence"
+            options={{ ...headerColors, title: "Add picture evidence" }}
+            component={ImageUploadEvidence}
+          />
+          <Stack.Screen
+            name="VideoUploadEvidence"
+            options={{ ...headerColors, title: "Add video evidence" }}
+            component={VideoUploadEvidence}
+          />
+          <Stack.Screen
+            name="VoiceUploadEvidence"
+            options={{ ...headerColors, title: "Add voice evidence" }}
+            component={VoiceUploadEvidence}
+          />
+          <Stack.Screen
+            name="EvidencePreview"
+            options={{ ...headerColors, title: "Preview evidence" }}
+            component={PreviewEvidence}
+          />
         </Stack.Navigator>
-
       </NavigationContainer>
     </NativeBaseProvider>
-  )
+  );
 }

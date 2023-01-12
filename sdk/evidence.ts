@@ -6,6 +6,8 @@ export const EvidenceSchema = z.object({
   portfolio_id: z.number(),
   evidence_type: z.string(),
   name: z.string(),
+  prettyName: z.string(),
+  type: z.string(),
   created_at: z.string(),
   updated_at: z.string(),
 });
@@ -27,7 +29,13 @@ export const Evidence = (config: ConfigInterface) => {
         "GET"
       );
 
-      return response.map((evidence: any) => EvidenceSchema.parse(evidence));
+      return response.map((evidence: any) =>
+        EvidenceSchema.parse({
+          ...evidence,
+          prettyName: getPrettyName(evidence.name),
+          type: getType(evidence.name),
+        })
+      );
     },
     async get(evidenceId: number): Promise<z.infer<typeof EvidenceSchema>> {
       const response = await fetcher(`evidence/${evidenceId}`, "GET");
@@ -50,3 +58,19 @@ export const Evidence = (config: ConfigInterface) => {
     },
   };
 };
+
+export const getPrettyName = (name: string) =>
+  name
+    .replace("Picture - ", "")
+    .replace("Video - ", "")
+    .replace("Voice - ", "")
+    .replace("File - ", "");
+
+export const getType = (name: string) =>
+  name.startsWith("Picture - ")
+    ? "picture"
+    : name.startsWith("Video - ")
+    ? "video"
+    : name.startsWith("Voice - ")
+    ? "voice"
+    : "file";
