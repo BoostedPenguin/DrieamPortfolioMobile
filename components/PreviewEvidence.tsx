@@ -16,10 +16,35 @@ type Props = NativeStackScreenProps<
 export default function PreviewEvidence({ route, navigation }: Props) {
   const [evidencePreview, setEvidencePreview] = useState();
   const [evidence, setEvidence] = useState<any>();
+  const [transcription, setTranscription] = useState<string | undefined>(
+    undefined
+  );
 
   useEffect(() => {
     getFileEvidence(route.params.evidenceId);
   }, []);
+
+  useEffect(() => {
+    const transcriptionId = evidence?.description?.text;
+
+    const evidenceType = getType(evidence?.name ?? "—");
+
+    if (transcriptionId && evidenceType === "voice") {
+      fetch(
+        `https://asr.api.speechmatics.com/v2/jobs/${evidence?.description?.text}/transcript?format=txt`,
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer OOFj76JSRhyomKGxCejXwomyY97xeECM`,
+          },
+        }
+      )
+        .then((response) => response.text())
+        .then((data) => {
+          setTranscription(data);
+        });
+    }
+  }, [evidence]);
 
   async function getFileEvidence(evidenceId: number) {
     const latestFile = await fetch(
@@ -59,6 +84,8 @@ export default function PreviewEvidence({ route, navigation }: Props) {
     setEvidencePreview(previewRes.download_url);
   }
 
+  const evidenceType = getType(evidence?.name ?? "—");
+
   return (
     <View
       style={{
@@ -77,7 +104,14 @@ export default function PreviewEvidence({ route, navigation }: Props) {
       />
 
       {evidencePreview && (
-        <Preview type={getType(evidence?.name ?? "—")} link={evidencePreview} />
+        <Preview type={evidenceType} link={evidencePreview} />
+      )}
+
+      {evidenceType === "voice" && (
+        <CustomPreviewInput
+          label="Transcription"
+          value={transcription ?? "—"}
+        />
       )}
     </View>
   );
@@ -140,7 +174,7 @@ export function Preview(props: PreviewProps) {
         <VStack flexGrow={1}>
           <Text mb={1}>Recording</Text>
           <Text color="#a1a1aa" fontSize={16}>
-            00:35
+            00:05
           </Text>
         </VStack>
         <HStack>
